@@ -4,41 +4,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+// ACHTUNG: Die @Override (s) stehen da nicht ohne Grund
 public class CollatzGUI {
   public static void main(String[] args) {
-    // Create the main frame
-    JFrame frame = new JFrame("Collatz Conjecture Plotter");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(600, 400);
 
-    // Create a panel for input and button
+    JFrame fenster = new JFrame("Collatz Conjecture Plotter");
+    fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    fenster.setSize(1920, 1080);
+
     JPanel panel = new JPanel();
     panel.setLayout(new FlowLayout());
 
-    JLabel label = new JLabel("Enter a number:");
-    JTextField textField = new JTextField(10);
-    JButton plotButton = new JButton("Plot");
+    JLabel label = new JLabel("Input: ");
+    JTextField textfeld = new JTextField(10);
+    JButton button = new JButton("Plot");
 
     panel.add(label);
-    panel.add(textField);
-    panel.add(plotButton);
+    panel.add(textfeld);
+    panel.add(button);
 
-    // Create a panel for the graph
-    GraphPanel graphPanel = new GraphPanel();
+    GraphPanel graphenPanel = new GraphPanel();
 
-    // Add panels to the frame
-    frame.setLayout(new BorderLayout());
-    frame.add(panel, BorderLayout.NORTH);
-    frame.add(graphPanel, BorderLayout.CENTER);
+    fenster.setLayout(new BorderLayout());
+    fenster.add(panel, BorderLayout.NORTH);
+    fenster.add(graphenPanel, BorderLayout.CENTER);
 
-    // Add action listener to the button
-    plotButton.addActionListener(new ActionListener() {
+    // Bereits implementierte Logik: (ArrayList ;) )
+    button.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         try {
-          long n = Long.parseLong(textField.getText());
-          ArrayList<Long> sequence = new ArrayList<>();
-          sequence.add(n);
+          long n = Long.parseLong(textfeld.getText());
+          ArrayList<Long> sequenz = new ArrayList<>();
+          sequenz.add(n);
 
           while (n > 1) {
             if (n % 2 == 0) {
@@ -46,72 +44,75 @@ public class CollatzGUI {
             } else {
               n = (n * 3) + 1;
             }
-            sequence.add(n);
+            sequenz.add(n);
           }
 
-          graphPanel.setSequence(sequence);
+          graphenPanel.setSequenz(sequenz);
         } catch (NumberFormatException ex) {
-          JOptionPane.showMessageDialog(frame, "Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(fenster, "Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
         }
       }
     });
 
-    // Display the frame
-    frame.setVisible(true);
+    fenster.setVisible(true);
   }
 }
 
 class GraphPanel extends JPanel {
-  private ArrayList<Long> sequence;
+  private ArrayList<Long> sequenz;
 
   public GraphPanel() {
-    sequence = new ArrayList<>();
+    sequenz = new ArrayList<>();
   }
 
-  public void setSequence(ArrayList<Long> sequence) {
-    this.sequence = sequence;
+  public void setSequenz(ArrayList<Long> sequenz) {
+    this.sequenz = sequenz;
     repaint();
   }
 
+  // NICHT LOESCHEN: Implementiert aus einer Schnittstelle
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
-    if (sequence.isEmpty()) {
+    if (sequenz.isEmpty()) {
       return;
     }
 
-    Graphics2D g2d = (Graphics2D) g;
-    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    Graphics2D graphik2D = (Graphics2D) g;
+    graphik2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-    int width = getWidth();
-    int height = getHeight();
+    int breite = getWidth();
+    int hoehe = getHeight();
     int padding = 50;
-    int pointWidth = 5;
+    int punktWeite = 5;
 
-    long maxValue = sequence.stream().max(Long::compare).orElse(1L);
+    // Maximalwert berechnen
+    long maxWert = sequenz.stream().max(Long::compare).orElse(1L);
 
-    int graphWidth = width - 2 * padding;
-    int graphHeight = height - 2 * padding;
+    // Graphikbereich berechnen
+    int graphenBreite = breite - 2 * padding;
+    int graphenHoehe = hoehe - 2 * padding;
 
-    int xStep = graphWidth / (sequence.size() - 1);
-    int yStep = graphHeight / (int) maxValue;
+    // Schrittweite berechnen
+    int xStep = graphenBreite / (sequenz.size() - 1);
+    int yStep = graphenHoehe / (int) maxWert;
 
-    // Draw axes
-    g2d.drawLine(padding, height - padding, padding, padding);
-    g2d.drawLine(padding, height - padding, width - padding, height - padding);
+    // Achsen
+    graphik2D.drawLine(padding, hoehe - padding, padding, padding);
+    graphik2D.drawLine(padding, hoehe - padding, breite - padding, hoehe - padding);
 
-    // Plot points
-    for (int i = 0; i < sequence.size(); i++) {
+    // Punkte und Verbindungen zeichnen
+    for (int i = 0; i < sequenz.size(); i++) {
       int x = padding + i * xStep;
-      int y = height - padding - (int) (sequence.get(i) * yStep);
+      int y = hoehe - padding - (int) (sequenz.get(i) * yStep);
 
-      g2d.fillOval(x - pointWidth / 2, y - pointWidth / 2, pointWidth, pointWidth);
+      graphik2D.fillOval(x - punktWeite / 2, y - punktWeite / 2, punktWeite, punktWeite);
 
       if (i > 0) {
         int prevX = padding + (i - 1) * xStep;
-        int prevY = height - padding - (int) (sequence.get(i - 1) * yStep);
-        g2d.drawLine(prevX, prevY, x, y);
+        int prevY = hoehe - padding - (int) (sequenz.get(i - 1) * yStep);
+        graphik2D.drawLine(prevX, prevY, x, y);
       }
     }
   }
