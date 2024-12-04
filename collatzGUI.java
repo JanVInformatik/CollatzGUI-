@@ -115,6 +115,7 @@ class GraphPanel extends JPanel {
     // Schrittweite berechnen
     int xStep = graphenBreite / (sequenz.size() - 1);
     int yStep = graphenHoehe / (int) maxWert;
+    double ySkalierung = (double) graphenHoehe / maxWert;
 
     // Achsen
     graphik2D.drawLine(padding, hoehe - padding, padding, padding);
@@ -152,6 +153,22 @@ class GraphPanel extends JPanel {
       graphik2D.drawLine(padding - 5, y, padding, y);
       String label = String.valueOf(maxWert * i / tickCount);
       graphik2D.drawString(label, padding - 40, y + 5);
+    }
+
+    for (int i = 0; i < sequenz.size() - 1; i++) {
+      int x1 = padding + i * xStep;
+      int y1 = hoehe - padding - (int) (sequenz.get(i) * ySkalierung);
+      int x2 = padding + (i + 1) * xStep;
+      int y2 = hoehe - padding - (int) (sequenz.get(i + 1) * ySkalierung);
+
+      // Draw line
+      graphik2D.setColor(Color.BLUE);
+      graphik2D.drawLine(x1, y1, x2, y2);
+
+      // Draw points
+      graphik2D.setColor(Color.RED);
+      graphik2D.fillOval(x1 - punktWeite / 2, y1 - punktWeite / 2, punktWeite, punktWeite);
+      graphik2D.fillOval(x2 - punktWeite / 2, y2 - punktWeite / 2, punktWeite, punktWeite);
     }
   }
 }
