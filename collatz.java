@@ -3,13 +3,13 @@ import java.util.Scanner;
 public class collatz {
   public static void main(String[] args) {
 
-    int schritte = 0;
+    long schritte = 0;
 
     System.out.println("Enter a number:");
     Scanner sc = new Scanner(System.in);
 
-    int n = sc.nextInt();
-    int x = n;
+    long n = sc.nextLong();
+    long x = n;
 
     while (n > 1) {
       if (n % 2 == 0)
