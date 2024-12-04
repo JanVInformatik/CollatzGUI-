@@ -113,8 +113,8 @@ class GraphPanel extends JPanel {
     int graphenHoehe = hoehe - 2 * padding;
 
     // Schrittweite berechnen
-    int xStep = graphenBreite / (sequenz.size() - 1);
-    int yStep = graphenHoehe / (int) maxWert;
+    int xSchritt = graphenBreite / (sequenz.size() - 1);
+    int ySchritt = graphenHoehe / (int) maxWert;
     double ySkalierung = (double) graphenHoehe / maxWert;
 
     // Achsen
@@ -127,20 +127,20 @@ class GraphPanel extends JPanel {
 
     // Plotte Punkte
     for (int i = 0; i < sequenz.size(); i++) {
-      int x = padding + i * xStep;
-      int y = hoehe - padding - (int) (sequenz.get(i) * yStep);
+      int x = padding + i * xSchritt;
+      int y = hoehe - padding - (int) (sequenz.get(i) * ySchritt);
 
       graphik2D.fillOval(x - punktWeite / 2, y - punktWeite / 2, punktWeite, punktWeite);
 
       if (i > 0) {
-        int prevX = padding + (i - 1) * xStep;
-        int prevY = hoehe - padding - (int) (sequenz.get(i - 1) * yStep);
+        int prevX = padding + (i - 1) * xSchritt;
+        int prevY = hoehe - padding - (int) (sequenz.get(i - 1) * ySchritt);
         graphik2D.drawLine(prevX, prevY, x, y);
       }
     }
 
     for (int i = 0; i < sequenz.size(); i++) {
-      int x = padding + i * xStep;
+      int x = padding + i * xSchritt;
       graphik2D.drawLine(x, hoehe - padding, x, hoehe - padding + 5);
       if (i % 5 == 0) {
         graphik2D.drawString(String.valueOf(i), x - 5, hoehe - padding + 20);
@@ -156,9 +156,9 @@ class GraphPanel extends JPanel {
     }
 
     for (int i = 0; i < sequenz.size() - 1; i++) {
-      int x1 = padding + i * xStep;
+      int x1 = padding + i * xSchritt;
       int y1 = hoehe - padding - (int) (sequenz.get(i) * ySkalierung);
-      int x2 = padding + (i + 1) * xStep;
+      int x2 = padding + (i + 1) * xSchritt;
       int y2 = hoehe - padding - (int) (sequenz.get(i + 1) * ySkalierung);
 
       // Draw line
