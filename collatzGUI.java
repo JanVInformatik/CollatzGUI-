@@ -25,18 +25,29 @@ public class CollatzGUI {
 
     GraphPanel graphenPanel = new GraphPanel();
 
+    JTextArea ausgabenFenster = new JTextArea(10, 50);
+    ausgabenFenster.setEditable(false);
+    JScrollPane scrollPane = new JScrollPane(ausgabenFenster);
+
     fenster.setLayout(new BorderLayout());
     fenster.add(panel, BorderLayout.NORTH);
     fenster.add(graphenPanel, BorderLayout.CENTER);
+    fenster.add(scrollPane, BorderLayout.SOUTH);
 
-    // Bereits implementierte Logik: (ArrayList ;) )
+    // Bereits implementierte Logik: (+ ArrayList ;) )
     button.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         try {
           long n = Long.parseLong(textfeld.getText());
+          long originalInput = n;
           ArrayList<Long> sequenz = new ArrayList<>();
           sequenz.add(n);
+
+          // Vorherige Ausgabe "loeschen"
+          ausgabenFenster.setText("");
+
+          int schritte = 0;
 
           while (n > 1) {
             if (n % 2 == 0) {
@@ -45,11 +56,18 @@ public class CollatzGUI {
               n = (n * 3) + 1;
             }
             sequenz.add(n);
+            schritte++;
+
+            if ((Math.log(n) / Math.log(2)) % 1 == 0) {
+              ausgabenFenster.append("N = " + n + " ist eine Zweierpotenz." + "\n");
+            }
           }
+          ausgabenFenster.append("Man braucht " + schritte + " Schritte, um 1 zu erreichen. Input: " + originalInput);
 
           graphenPanel.setSequenz(sequenz);
         } catch (NumberFormatException ex) {
-          JOptionPane.showMessageDialog(fenster, "Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(fenster, "Bitte geben Sie eine passende Nummer ein.", "Fehler",
+              JOptionPane.ERROR_MESSAGE);
         }
       }
     });
@@ -102,7 +120,11 @@ class GraphPanel extends JPanel {
     graphik2D.drawLine(padding, hoehe - padding, padding, padding);
     graphik2D.drawLine(padding, hoehe - padding, breite - padding, hoehe - padding);
 
-    // Punkte und Verbindungen zeichnen
+    // Beschriftung hierfuer
+    graphik2D.drawString("Schritt", breite / 2, hoehe - padding / 2);
+    graphik2D.drawString("Wert", padding / 4, hoehe / 2);
+
+    // Plotte Punkte
     for (int i = 0; i < sequenz.size(); i++) {
       int x = padding + i * xStep;
       int y = hoehe - padding - (int) (sequenz.get(i) * yStep);
@@ -114,6 +136,22 @@ class GraphPanel extends JPanel {
         int prevY = hoehe - padding - (int) (sequenz.get(i - 1) * yStep);
         graphik2D.drawLine(prevX, prevY, x, y);
       }
+    }
+
+    for (int i = 0; i < sequenz.size(); i++) {
+      int x = padding + i * xStep;
+      graphik2D.drawLine(x, hoehe - padding, x, hoehe - padding + 5);
+      if (i % 5 == 0) {
+        graphik2D.drawString(String.valueOf(i), x - 5, hoehe - padding + 20);
+      }
+    }
+
+    int tickCount = 10;
+    for (int i = 0; i <= tickCount; i++) {
+      int y = hoehe - padding - i * graphenHoehe / tickCount;
+      graphik2D.drawLine(padding - 5, y, padding, y);
+      String label = String.valueOf(maxWert * i / tickCount);
+      graphik2D.drawString(label, padding - 40, y + 5);
     }
   }
 }
