@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class collatz {
+public class collatzLong {
   public static void main(String[] args) {
 
     long schritte = 0;

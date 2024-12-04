@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class collatz {
+public class collatzGUI {
   public static void main(String[] args) {
 
     long schritte = 0;
