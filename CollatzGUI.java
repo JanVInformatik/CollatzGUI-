@@ -102,15 +102,15 @@ class GraphPanel extends JPanel {
 
     int breite = getWidth();
     int hoehe = getHeight();
-    int padding = 50;
+    int abstand = 50;
     int punktWeite = 5;
 
     // Maximalwert berechnen
     long maxWert = sequenz.stream().max(Long::compare).orElse(1L);
 
     // Graphikbereich berechnen
-    int graphenBreite = breite - 2 * padding;
-    int graphenHoehe = hoehe - 2 * padding;
+    int graphenBreite = breite - 2 * abstand;
+    int graphenHoehe = hoehe - 2 * abstand;
 
     // Schrittweite berechnen
     int xSchritt = graphenBreite / (sequenz.size() - 1);
@@ -118,48 +118,48 @@ class GraphPanel extends JPanel {
     double ySkalierung = (double) graphenHoehe / maxWert;
 
     // Achsen
-    graphik2D.drawLine(padding, hoehe - padding, padding, padding);
-    graphik2D.drawLine(padding, hoehe - padding, breite - padding, hoehe - padding);
+    graphik2D.drawLine(abstand, hoehe - abstand, abstand, abstand);
+    graphik2D.drawLine(abstand, hoehe - abstand, breite - abstand, hoehe - abstand);
 
     // Beschriftung hierfuer
-    graphik2D.drawString("Schritt", breite / 2, hoehe - padding / 2);
-    graphik2D.drawString("Wert", padding / 4, hoehe / 2);
+    graphik2D.drawString("Schritt", breite / 2, hoehe - abstand / 2);
+    graphik2D.drawString("Wert", abstand / 4, hoehe / 2);
 
     // Plotte Punkte
     for (int i = 0; i < sequenz.size(); i++) {
-      int x = padding + i * xSchritt;
-      int y = hoehe - padding - (int) (sequenz.get(i) * ySchritt);
+      int x = abstand + i * xSchritt;
+      int y = hoehe - abstand - (int) (sequenz.get(i) * ySchritt);
 
       graphik2D.fillOval(x - punktWeite / 2, y - punktWeite / 2, punktWeite, punktWeite);
 
       if (i > 0) {
-        int prevX = padding + (i - 1) * xSchritt;
-        int prevY = hoehe - padding - (int) (sequenz.get(i - 1) * ySchritt);
+        int prevX = abstand + (i - 1) * xSchritt;
+        int prevY = hoehe - abstand - (int) (sequenz.get(i - 1) * ySchritt);
         graphik2D.drawLine(prevX, prevY, x, y);
       }
     }
 
     for (int i = 0; i < sequenz.size(); i++) {
-      int x = padding + i * xSchritt;
-      graphik2D.drawLine(x, hoehe - padding, x, hoehe - padding + 5);
+      int x = abstand + i * xSchritt;
+      graphik2D.drawLine(x, hoehe - abstand, x, hoehe - abstand + 5);
       if (i % 5 == 0) {
-        graphik2D.drawString(String.valueOf(i), x - 5, hoehe - padding + 20);
+        graphik2D.drawString(String.valueOf(i), x - 5, hoehe - abstand + 20);
       }
     }
 
     int tickCount = 10;
     for (int i = 0; i <= tickCount; i++) {
-      int y = hoehe - padding - i * graphenHoehe / tickCount;
-      graphik2D.drawLine(padding - 5, y, padding, y);
+      int y = hoehe - abstand - i * graphenHoehe / tickCount;
+      graphik2D.drawLine(abstand - 5, y, abstand, y);
       String label = String.valueOf(maxWert * i / tickCount);
-      graphik2D.drawString(label, padding - 40, y + 5);
+      graphik2D.drawString(label, abstand - 40, y + 5);
     }
 
     for (int i = 0; i < sequenz.size() - 1; i++) {
-      int x1 = padding + i * xSchritt;
-      int y1 = hoehe - padding - (int) (sequenz.get(i) * ySkalierung);
-      int x2 = padding + (i + 1) * xSchritt;
-      int y2 = hoehe - padding - (int) (sequenz.get(i + 1) * ySkalierung);
+      int x1 = abstand + i * xSchritt;
+      int y1 = hoehe - abstand - (int) (sequenz.get(i) * ySkalierung);
+      int x2 = abstand + (i + 1) * xSchritt;
+      int y2 = hoehe - abstand - (int) (sequenz.get(i + 1) * ySkalierung);
 
       // Draw line
       graphik2D.setColor(Color.BLUE);
