@@ -8,16 +8,16 @@ import java.util.ArrayList;
 public class CollatzGUI {
   public static void main(String[] args) {
 
-    JFrame fenster = new JFrame("Collatz Conjecture Plotter");
+    JFrame fenster = new JFrame("Collatz Plotter");
     fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     fenster.setSize(1920, 1080);
 
     JPanel panel = new JPanel();
     panel.setLayout(new FlowLayout());
 
-    JLabel label = new JLabel("Input: ");
+    JLabel label = new JLabel("Eingabe: ");
     JTextField textfeld = new JTextField(10);
-    JButton button = new JButton("Plot");
+    JButton button = new JButton("Zeichnen");
 
     panel.add(label);
     panel.add(textfeld);
